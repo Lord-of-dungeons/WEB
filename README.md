@@ -1,4 +1,4 @@
-# e-commerce
+# PM5-web-front
 
 ## Project setup
 ```
