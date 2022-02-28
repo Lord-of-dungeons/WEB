@@ -28,7 +28,6 @@
                         </div>
                     </v-container>
                 </v-col>
-
                 <v-col md="7" class="grey lighten-3 pa-0 d-none d-md-block">
                     <v-img contain src="@/assets/hero-clean-square.png"></v-img>
                 </v-col>
