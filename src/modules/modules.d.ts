@@ -1,0 +1,12 @@
+declare module 'vue-page-transition';
+declare module 'vuetify-audio';
+declare module 'lodash/upperFirst';
+declare module 'lodash/camelCase';
+declare module 'lodash';
+declare module 'vuesax';
+declare module 'leaflet';
+declare module 'tiptap-vuetify';
+declare module 'vue-kinesis';
+declare module 'vue-animejs';
+//declare module 'vue-carousel-3d';
+//declare module 'vuescroll';
