@@ -1,6 +1,6 @@
 <template>
 <v-card  height="240"  flat>
-    <v-navigation-drawer class="cPrimary accent-4" permanent >
+    <v-navigation-drawer class="cPrimary accent-4" permanent width='100%'>
         <v-list>
             <v-list-item v-for="item in items" :key="item.title" link>
                 <v-list-item-icon>

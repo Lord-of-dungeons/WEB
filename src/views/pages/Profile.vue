@@ -3,8 +3,6 @@
 <!-- ANCHOR Page content -->
 <div>
     <v-container>
-       
-
         <v-card>
             <v-container>
                 <v-row>
@@ -25,13 +23,13 @@
                         <v-row align="center" justify="center">
                             <v-col md="4">
                                 <span class="text-body-1">Votre avatar</span>
-                                <v-avatar class="ml-8 mb-3" color="white" size="75">
+                                <v-avatar class="ml-3 ml-md-8 mb-3" color="white" size="75">
                                     <v-img contain :src="ppURL"></v-img>
                                 </v-avatar>
                             </v-col>
-                            <v-col md="8" align="start">
-                                <v-btn small dark depressed color="cProfile" class="mb-sm-3 mr-3 text-button">Changer d'avatar</v-btn>
-                                <v-btn small dark depressed color="cProfile" class="mb-sm-3 text-button">Supprimer l'avatar</v-btn>
+                            <v-col md="8">
+                                <v-btn small dark depressed color="cProfile" class="mb-md-0 mb-3  mr-md-3 text-button">Changer d'avatar</v-btn>
+                                <v-btn small dark depressed color="cProfile" class="mb-md-0 mb-3  text-button">Supprimer l'avatar</v-btn>
                             </v-col>
                         </v-row>
                         <v-text-field class="text-center mx-2" v-model="firstname" label="Prénom" required></v-text-field>
@@ -51,14 +49,12 @@
                         </v-dialog>
                         <v-text-field class="text-center mx-2" v-model="pseudo" label="Pseudonyme" required></v-text-field>
                         <v-text-field class="text-center mx-2" v-model="email" :rules="emailRules" label="Email" required></v-text-field>
-                        <v-row>
-                            <v-col>
-                                <v-btn dark depressed color="cProfile" class="ml-2 text-button" @click="changePassword">Changer le mot de passe</v-btn>
-                                <v-btn dark depressed color="cFontEmail" class="ml-2 text-button" @click="deleteAccount">
-                                    <v-icon left dark>mdi-alert</v-icon>Supprimer le compte
-                                </v-btn>
-                            </v-col>
-                        </v-row>
+                        <v-switch class ='ml-3' inset color="cMulti" v-model="switchNewsletter" :label="`Newsletter`"></v-switch>
+
+                        <v-btn dark depressed color="cProfile" class="mb-md-0 mb-3 ml-2 text-button" @click="changePassword">Changer le mot de passe</v-btn>
+                        <v-btn dark depressed color="cFontEmail" class="ml-2 text-button" @click="deleteAccount">
+                            <v-icon left dark>mdi-alert</v-icon>Supprimer le compte
+                        </v-btn>
                     </v-col>
                 </v-row>
             </v-container>
@@ -95,6 +91,7 @@ export default Vue.extend({
             birthdayDate: "1990-06-23",
             pseudo: "michFor4ver",
             email: "michFor4ver@gmail.com",
+            switchNewsletter: true,
             ppURL: "https://pbs.twimg.com/media/E2EA4moXsAIeOPq?format=jpg&name=large",
         };
     },
