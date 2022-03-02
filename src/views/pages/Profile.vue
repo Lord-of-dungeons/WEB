@@ -17,39 +17,39 @@
                                 </h1>
                             </v-col>
                             <v-col md="3">
-                                <v-btn dark depressed color="cProfile" class="ml-2 text-button">Mettre à jour</v-btn>
+                                <v-btn dark depressed color="cProfile" class="ml-2 text-button" @click="updateProfile">Mettre à jour</v-btn>
                             </v-col>
                         </v-row>
                         <v-row align="center" justify="center">
                             <v-col md="4">
                                 <span class="text-body-1">Votre avatar</span>
                                 <v-avatar class="ml-3 ml-md-8 mb-3" color="white" size="75">
-                                    <v-img contain :src="ppURL"></v-img>
+                                    <v-img contain :src="profile.profilePicturePath"></v-img>
                                 </v-avatar>
                             </v-col>
                             <v-col md="8">
                                 <v-btn small dark depressed color="cProfile" class="mb-md-0 mb-3  mr-md-3 text-button">Changer d'avatar</v-btn>
-                                <v-btn small dark depressed color="cProfile" class="mb-md-0 mb-3  text-button">Supprimer l'avatar</v-btn>
+                                <!--<v-btn small dark depressed color="cProfile" class="mb-md-0 mb-3  text-button">Supprimer l'avatar</v-btn>-->
                             </v-col>
                         </v-row>
-                        <v-text-field class="text-center mx-2" v-model="firstname" label="Prénom" required></v-text-field>
-                        <v-text-field class="text-center mx-2" v-model="lastname" label="Nom" required></v-text-field>
+                        <v-text-field class="text-center mx-2" v-model="profile.firstname" label="Prénom" required></v-text-field>
+                        <v-text-field class="text-center mx-2" v-model="profile.lastname" label="Nom" required></v-text-field>
                         <!-- Date Picker -->
-                        <v-dialog ref="dialog" v-model="modal" :return-value.sync="birthdayDate" persistent width="290px">
+                        <v-dialog ref="dialog" v-model="modal" :return-value.sync="profile.birthday" persistent width="290px">
                             <template v-slot:activator="{ on, attrs }">
-                                <v-text-field class="text-center mx-2" v-model="birthdayDate" label="Date de naissance" readonly v-bind="attrs" v-on="on"></v-text-field>
+                                <v-text-field class="text-center mx-2" v-model="profile.birthday" label="Date de naissance" readonly v-bind="attrs" v-on="on"></v-text-field>
                             </template>
-                            <v-date-picker v-model="birthdayDate" scrollable header-color="cPrimary2" color="cPrimary2" locale="fr-FR">
+                            <v-date-picker v-model="profile.birthday" scrollable header-color="cPrimary2" color="cPrimary2" locale="fr-FR">
                                 <v-spacer></v-spacer>
                                 <v-btn text color="black" @click="modal = false"> Annuler </v-btn>
-                                <v-btn text color="black" @click="$refs.dialog.save(birthdayDate)">
+                                <v-btn text color="black" @click="$refs.dialog.save(profile.birthday)">
                                     OK
                                 </v-btn>
                             </v-date-picker>
                         </v-dialog>
-                        <v-text-field class="text-center mx-2" v-model="pseudo" label="Pseudonyme" required></v-text-field>
-                        <v-text-field class="text-center mx-2" v-model="email" :rules="emailRules" label="Email" required></v-text-field>
-                        <v-switch class ='ml-3' inset color="cMulti" v-model="switchNewsletter" :label="`Newsletter`"></v-switch>
+                        <v-text-field class="text-center mx-2" v-model="profile.pseudo" label="Pseudonyme" required></v-text-field>
+                        <v-text-field class="text-center mx-2" v-model="profile.email" :rules="emailRules" label="Email" required></v-text-field>
+                        <v-switch class='ml-3' inset color="cMulti" v-model="profile.newsletter" :label="`Newsletter`"></v-switch>
 
                         <v-btn dark depressed color="cProfile" class="mb-md-0 mb-3 ml-2 text-button" @click="changePassword">Changer le mot de passe</v-btn>
                         <v-btn dark depressed color="cFontEmail" class="ml-2 text-button" @click="deleteAccount">
@@ -59,6 +59,7 @@
                 </v-row>
             </v-container>
         </v-card>
+        <alert />
         <dialog-change-password />
         <dialog-delete />
     </v-container>
@@ -70,15 +71,20 @@
 <script lang="ts">
 // ANCHOR External import
 import Vue from "vue";
+import axios from "axios";
+
+// ANCHOR Internal import
 import {
     bus
 } from "@/main";
+import router from "@/router"
 
-// ANCHOR Internal import
+const API_URL = process.env.VUE_APP_API_URL as string;
 
 export default Vue.extend({
     name: "Profile",
     components: {
+        Alert: () => import('@/components/Alert.vue'),
         NavProfile: () => import('@/components/NavProfile.vue'),
         DialogChangePassword: () => import('@/components/DialogChangePassword.vue'),
         DialogDelete: () => import('@/components/DialogDelete.vue'),
@@ -86,13 +92,16 @@ export default Vue.extend({
     data() {
         return {
             modal: false,
-            firstname: "Michel",
-            lastname: "Forever",
-            birthdayDate: "1990-06-23",
-            pseudo: "michFor4ver",
-            email: "michFor4ver@gmail.com",
-            switchNewsletter: true,
-            ppURL: "https://pbs.twimg.com/media/E2EA4moXsAIeOPq?format=jpg&name=large",
+            profile: {
+                firstname: "",
+                lastname: "",
+                birthday: "",
+                pseudo: "",
+                email: "",
+                newsletter: false,
+                profilePicturePath: "",
+            },
+
         };
     },
     methods: {
@@ -110,9 +119,63 @@ export default Vue.extend({
                 ""
             );
         },
+        getProfile() {
+            axios
+                .get(API_URL + "/user/profile", {
+                    withCredentials: true
+                })
+                .then((response) => {
+                    if (response.status == 200) {
+                        const data = response.data
+                        this.profile.firstname = data.firstname
+                        this.profile.lastname = data.lastname
+                        this.profile.birthday = data.birthday
+                        this.profile.pseudo = data.pseudo
+                        this.profile.email = data.email
+                        this.profile.newsletter = !!+data.newsletter //convert tinyint to boolean
+                        this.profile.profilePicturePath = API_URL.slice(0, -4) + data.profilePicturePath
+                    }
+                })
+                .catch(function (error) {
+
+                });
+        },
+        updateProfile() {
+            axios
+                .put(API_URL + "/user/edit-profile", {
+                    firstname: this.profile.firstname,
+                    lastname: this.profile.lastname,
+                    birthday: this.profile.birthday,
+                    pseudo: this.profile.pseudo,
+                    email: this.profile.email,
+                    newsletter: this.profile.newsletter,
+                    profilePicturePath: this.profile.profilePicturePath,
+                }, {
+                    withCredentials: true
+                })
+                .then((response) => {
+                    if (response.status == 201) {
+                        bus.$emit(
+                            "openAlert",
+                            "Information",
+                            "Profil mis à jour avec succès."
+                        );
+                    }
+                })
+                .catch(function (error) {
+                    bus.$emit(
+                        "openAlert",
+                        "Erreur",
+                        "Syntaxe des informations invalide !",
+                        ""
+                    );
+                });
+        }
     },
+
     mounted() {
         const API_URL = "";
+        this.getProfile();
     },
 });
 </script>

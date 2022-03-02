@@ -6,6 +6,38 @@ import store from '@/store/index';
 
 Vue.use(VueRouter);
 
+function guardOffline(to: any, from: any, next: any) {
+	let isAuthenticated = false;
+	//this is just an example. You will have to find a better or 
+	// centralised way to handle you localstorage data handling 
+	if (localStorage.getItem('isAuthenticated'))
+		isAuthenticated = true;
+	else
+		isAuthenticated = false;
+	if (isAuthenticated) {
+		next(); // allow to enter route
+	}
+	else {
+		next('/login'); // go to '/login';
+	}
+}
+
+
+function guardOnline(to: any, from: any, next: any) {
+	let isAuthenticated = false;
+	//this is just an example. You will have to find a better or 
+	// centralised way to handle you localstorage data handling 
+	if (localStorage.getItem('isAuthenticated'))
+		isAuthenticated = true;
+	else
+		isAuthenticated = false;
+	if (isAuthenticated) {
+		next('/listPost'); // allow to enter route
+	}
+	else {
+		next(); // go to '/login';
+	}
+}
 
 
 const routes: Array<RouteConfig> = [

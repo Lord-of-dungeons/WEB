@@ -9,9 +9,9 @@
 
     <!-- ANCHOR Desktop view -->
     <div class="d-none d-md-block">
-        <v-btn small dark depressed color="cPlay" class="ml-2 text-button">Présentation</v-btn>
+        <v-btn small dark depressed color="cPlay" class="ml-2 text-button" @click="$router.push('/home')">Présentation</v-btn>
         <v-btn small dark depressed color="cShop" class="ml-2 text-button">Boutique</v-btn>
-        <v-btn small dark depressed color="cProfile" class="ml-2 text-button">{{
+        <v-btn small dark depressed color="cProfile" class="ml-2 text-button" @click="$router.push(routeProfile)">{{
           textProfile
         }}</v-btn>
     </div>
@@ -26,13 +26,13 @@
             </template>
             <v-list>
                 <v-list-item>
-                    <v-btn small dark depressed color="cPlay" class="text-button">Présentation</v-btn>
+                    <v-btn small dark depressed color="cPlay" class="text-button" @click="$router.push('/home')">Présentation</v-btn>
                 </v-list-item>
                 <v-list-item>
                     <v-btn small dark depressed color="cShop" class="text-button">Boutique</v-btn>
                 </v-list-item>
                 <v-list-item>
-                    <v-btn small dark depressed color="cProfile" class="text-button">{{ textProfile }}</v-btn>
+                    <v-btn small dark depressed color="cProfile" class="text-button" @click="$router.push(routeProfile)">{{ textProfile }}</v-btn>
                 </v-list-item>
                 </v-list-item>
             </v-list>
@@ -58,6 +58,7 @@ export default Vue.extend({
     data() {
         return {
             textProfile: "Connexion",
+            routeProfile: "/profile"
         };
     },
     methods: {},
