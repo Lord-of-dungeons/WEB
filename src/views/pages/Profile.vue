@@ -28,11 +28,19 @@
                                 </v-avatar>
                             </v-col>
                             <v-col md="8">
-                                <v-btn small dark depressed color="cProfile" class="mb-md-0 mb-3  mr-md-3 text-button">Changer d'avatar</v-btn>
-                                <!--<v-btn small dark depressed color="cProfile" class="mb-md-0 mb-3  text-button">Supprimer l'avatar</v-btn>-->
+                                <v-btn  dark depressed color="cProfile" class="mb-md-0 mb-3  mr-md-3 text-button" @click="changeAvatar">Modifier</v-btn>
                             </v-col>
                         </v-row>
-                        <v-text-field class="text-center mx-2" v-model="profile.firstname" label="Prénom" required></v-text-field>
+                        <v-row class="pt-0" align="center" justify="center">
+                            <v-col md="4">
+                                <span class="text-body-1 ">Pseudonyme : {{ profile.pseudo }}</span>
+                            </v-col>
+                            <v-col md="8">
+                                <v-btn dark depressed color="cProfile" class="mb-md-0 mb-3  mr-md-3 text-button" @click="changePseudo">Modifier</v-btn>
+                            </v-col>
+                        </v-row>
+
+                        <v-text-field class="text-center mx-2 mt-6" v-model="profile.firstname" label="Prénom" required></v-text-field>
                         <v-text-field class="text-center mx-2" v-model="profile.lastname" label="Nom" required></v-text-field>
                         <!-- Date Picker -->
                         <v-dialog ref="dialog" v-model="modal" :return-value.sync="profile.birthday" persistent width="290px">
@@ -47,8 +55,8 @@
                                 </v-btn>
                             </v-date-picker>
                         </v-dialog>
-                        <v-text-field class="text-center mx-2" v-model="profile.pseudo" label="Pseudonyme" required></v-text-field>
-                        <v-text-field class="text-center mx-2" v-model="profile.email" :rules="emailRules" label="Email" required></v-text-field>
+
+                        <v-text-field class="text-center mx-2" v-model="profile.email" label="Email" required></v-text-field>
                         <v-switch class='ml-3' inset color="cMulti" v-model="profile.newsletter" :label="`Newsletter`"></v-switch>
 
                         <v-btn dark depressed color="cProfile" class="mb-md-0 mb-3 ml-2 text-button" @click="changePassword">Changer le mot de passe</v-btn>
@@ -61,6 +69,8 @@
         </v-card>
         <alert />
         <dialog-change-password />
+        <dialog-change-pseudo :profile="profile" />
+        <dialog-change-avatar :profile="profile" />
         <dialog-delete />
     </v-container>
 </div>
@@ -86,7 +96,9 @@ export default Vue.extend({
     components: {
         Alert: () => import('@/components/Alert.vue'),
         NavProfile: () => import('@/components/NavProfile.vue'),
+        DialogChangeAvatar: () => import('@/components/DialogChangeAvatar.vue'),
         DialogChangePassword: () => import('@/components/DialogChangePassword.vue'),
+        DialogChangePseudo: () => import('@/components/DialogChangePseudo.vue'),
         DialogDelete: () => import('@/components/DialogDelete.vue'),
     },
     data() {
@@ -97,6 +109,7 @@ export default Vue.extend({
                 lastname: "",
                 birthday: "",
                 pseudo: "",
+                pseudobis: "",
                 email: "",
                 newsletter: false,
                 profilePicturePath: "",
@@ -105,8 +118,14 @@ export default Vue.extend({
         };
     },
     methods: {
+        changePseudo() {
+            bus.$emit("changePseudoDialog");
+        },
         changePassword() {
             bus.$emit("changePasswordDialog");
+        },
+        changeAvatar() {
+            bus.$emit("changeAvatarDialog");
         },
         deleteAccount() {
             bus.$emit(
@@ -131,13 +150,14 @@ export default Vue.extend({
                         this.profile.lastname = data.lastname
                         this.profile.birthday = data.birthday
                         this.profile.pseudo = data.pseudo
+                        this.profile.pseudobis = data.pseudo
                         this.profile.email = data.email
                         this.profile.newsletter = !!+data.newsletter //convert tinyint to boolean
                         this.profile.profilePicturePath = API_URL.slice(0, -4) + data.profilePicturePath
                     }
                 })
                 .catch(function (error) {
-
+                    bus.$emit("openAlert", "Erreur", error.response.data.error, "");
                 });
         },
         updateProfile() {
@@ -146,10 +166,8 @@ export default Vue.extend({
                     firstname: this.profile.firstname,
                     lastname: this.profile.lastname,
                     birthday: this.profile.birthday,
-                    pseudo: this.profile.pseudo,
                     email: this.profile.email,
                     newsletter: this.profile.newsletter,
-                    profilePicturePath: this.profile.profilePicturePath,
                 }, {
                     withCredentials: true
                 })

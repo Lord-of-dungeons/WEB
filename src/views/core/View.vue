@@ -4,9 +4,6 @@
         <router-view class="mb-7" style="z-index: 99" />
     </vue-page-transition>
 
-    <!--<base-go-to-up style="z-index: 999;" v-if="$router.history.current.name !== 'Connexion'" />-->
-    
-    <dashboard-core-footer style="z-index:0;" />
 </v-main>
 </template>
 

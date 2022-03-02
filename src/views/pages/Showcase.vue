@@ -149,7 +149,7 @@ import Vue from "vue";
 // ANCHOR Internal import 
 
 export default Vue.extend({
-    name: "App",
+    name: "Showcase",
     components: {
 
     },

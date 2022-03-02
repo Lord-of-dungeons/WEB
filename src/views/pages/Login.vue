@@ -57,7 +57,7 @@ console.log('API_URL: ', API_URL)
 
 let isConnected = true;
 export default Vue.extend({
-    name: "App",
+    name: "Login",
     components: {
         Alert: () => import('@/components/Alert.vue'),
         DialogDelete: () => import('@/components/DialogDelete.vue'),
@@ -120,14 +120,7 @@ export default Vue.extend({
                             }
                         })
                         .catch(function (error) {
-                            if (error.response.status == 400) {
-                                bus.$emit(
-                                    "openAlert",
-                                    "Erreur",
-                                    "Identifiants incorrect !",
-                                    ""
-                                );
-                            }
+                            bus.$emit("openAlert", "Erreur", error.response.data.error, "");
                         });
                 }
             }

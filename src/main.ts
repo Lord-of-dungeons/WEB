@@ -18,7 +18,7 @@ import VuePageTransition from 'vue-page-transition';
 //import vuescroll from 'vuescroll';
 
 Vue.config.productionTip = false;
-Vue.prototype.$appName = 'IT RPG SOFTWARE'
+Vue.prototype.$appName = 'PM5 WEB FRONT'
 
 Vue.use(qs.stringify); // querystringify
 Vue.use(moment);

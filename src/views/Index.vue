@@ -3,7 +3,6 @@
     <dashboard-core-app-bar />
     <dashboard-core-view />
     <dashboard-core-footer />
-
 </v-app>
 </template>
 
@@ -18,8 +17,8 @@ export default Vue.extend({
     name: 'Index',
     components: {
         DashboardCoreAppBar: () => import('@/views/core/AppBar.vue'),
-        DashboardCoreFooter: () => import('@/views/core/Footer.vue'),
         DashboardCoreView: () => import('@/views/core/View.vue'),
+        DashboardCoreFooter: () => import('@/views/core/Footer.vue'),
     },
     data: () => ({
     }),
