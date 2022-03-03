@@ -6,18 +6,18 @@
             <v-text-field class="text-center mx-2" v-model="lastname" label="Nom" required></v-text-field>
             <v-text-field class="text-center mx-2" v-model="firstname" label="Prénom" required></v-text-field>
             <v-text-field class="text-center mx-2" v-model="pseudo" label="Pseudonyme" required></v-text-field>
-            <v-text-field class="text-center mx-2" v-model="email" :rules="emailRules" label="Email" required></v-text-field>
+            <v-text-field class="text-center mx-2" v-model="email" label="Email" required></v-text-field>
             <!-- Date Picker -->
-            <v-dialog ref="dialog" v-model="modal" :return-value.sync="birthdayDate" persistent width="290px">
+            <v-dialog ref="dialog" v-model="modal" :return-value.sync="birthday" persistent width="290px">
                 <template v-slot:activator="{ on, attrs }">
-                    <v-text-field class="text-center mx-2" v-model="birthdayDate" label="Date de naissance" readonly v-bind="attrs" v-on="on"></v-text-field>
+                    <v-text-field class="text-center mx-2" v-model="birthday" label="Date de naissance" readonly v-bind="attrs" v-on="on"></v-text-field>
                 </template>
-                <v-date-picker v-model="birthdayDate" scrollable header-color="cPrimary2" color="cPrimary2" locale="fr-FR">
+                <v-date-picker v-model="birthday" scrollable header-color="cPrimary2" color="cPrimary2" locale="fr-FR">
                     <v-spacer></v-spacer>
                     <v-btn text color="black" @click="modal = false">
                         Annuler
                     </v-btn>
-                    <v-btn text color="black" @click="$refs.dialog.save(birthdayDate)">
+                    <v-btn text color="black" @click="$refs.dialog.save(birthday)">
                         OK
                     </v-btn>
                 </v-date-picker>
@@ -49,6 +49,7 @@ export default Vue.extend({
             pseudo: "",
             birthday: "",
             password: "",
+            confirmPassword: "",
             profilePicturePath: "",
             newsletter: true,
 

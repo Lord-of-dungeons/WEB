@@ -7,7 +7,7 @@
                 <v-col md="5">
                     <v-container>
                         <v-card-title style="word-break: break-word" class="justify-center">Rejoignez l'univers Lord of Dungeons</v-card-title>
-                        <v-text-field class="text-center" v-model="email" :rules="emailRules" label="Email" required></v-text-field>
+                        <v-text-field class="text-center" v-model="email" label="Email" required></v-text-field>
                         <v-text-field class="input-group--focused " v-model="password" :append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'" :type="show3 ? 'text' : 'password'" name="input-10-2" label="Mot de passe" hint="At least 8 characters" @click:append="show3 = !show3"></v-text-field>
 
                         <v-btn rounded dark depressed color="cProfile" @click="Login">Go</v-btn>
@@ -53,9 +53,6 @@ import {
 } from "@/main";
 
 const API_URL = process.env.VUE_APP_API_URL as string;
-console.log('API_URL: ', API_URL)
-
-let isConnected = true;
 
 
 export default Vue.extend({
