@@ -17,7 +17,7 @@ async function createWindow() {
     width: screen.getPrimaryDisplay().workAreaSize.width,//800
     height: screen.getPrimaryDisplay().workAreaSize.height,//600
     title: 'Dashboard e-commerce',
-    icon: path.join("icons/icon_commerce.ico"),
+    icon: path.join("icons/favicon.ico"),
     webPreferences: {
       contextIsolation: true,
       // Required for Spectron testing

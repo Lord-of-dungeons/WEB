@@ -22,7 +22,7 @@
                             <v-btn rounded dark depressed color="cGoogle" class="ma-2 mb-1">
                                 <v-icon left dark>mdi-google</v-icon>Google
                             </v-btn>
-                            <v-btn rounded dark depressed color="cGithub" class="ma-2">
+                            <v-btn rounded dark depressed color="cGithub" class="ma-2" @click="authenticate('github')">
                                 <v-icon left dark>mdi-github</v-icon>Github
                             </v-btn>
                         </div>
@@ -32,9 +32,9 @@
                     <v-img contain src="@/assets/hero-clean-square.png"></v-img>
                 </v-col>
             </v-row>
-            <alert/>
-            <dialog-register/>
-            <dialog-delete/>
+            <alert />
+            <dialog-register />
+            <dialog-delete />
         </v-card>
     </v-container>
 </div>
@@ -44,7 +44,7 @@
 // ANCHOR External imports
 import Vue from "vue";
 import router from "@/router";
-import axios from "axios";
+import axios from 'axios';
 import validator from 'validator';
 
 // ANCHOR Internal imports
@@ -56,6 +56,8 @@ const API_URL = process.env.VUE_APP_API_URL as string;
 console.log('API_URL: ', API_URL)
 
 let isConnected = true;
+
+
 export default Vue.extend({
     name: "Login",
     components: {
@@ -84,6 +86,7 @@ export default Vue.extend({
         };
     },
     methods: {
+
         Login() {
             if (this.email == "" || this.password == "")
                 bus.$emit(

@@ -6,7 +6,7 @@ module.exports = {
         electronBuilder: {
             builderOptions: {
                 win: {
-                    icon: 'icons/icon_commerce.ico'
+                    icon: 'icons/favicon.ico'
                 }
             }
         }
