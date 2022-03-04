@@ -6,36 +6,18 @@ import { bus } from '../main';
 Vue.use(VueRouter);
 
 function guardOffline(to: any, from: any, next: any) {
-	let isAuthenticated = false;
-	//this is just an example. You will have to find a better or 
-	// centralised way to handle you localstorage data handling 
-	if (localStorage.getItem('isAuthenticated'))
-		isAuthenticated = true;
-	else
-		isAuthenticated = false;
-	if (isAuthenticated) {
-		next(); // allow to enter route
-	}
-	else {
-		next('/login'); // go to '/login';
-	}
+	if (localStorage.getItem('isAuthenticated')=='true')
+		next();
+	else 
+		next('/login'); 
 }
 
 
 function guardOnline(to: any, from: any, next: any) {
-	let isAuthenticated = false;
-	//this is just an example. You will have to find a better or 
-	// centralised way to handle you localstorage data handling 
-	if (localStorage.getItem('isAuthenticated'))
-		isAuthenticated = true;
-	else
-		isAuthenticated = false;
-	if (isAuthenticated) {
-		next('/listPost'); // allow to enter route
-	}
-	else {
-		next(); // go to '/login';
-	}
+	if (localStorage.getItem('isAuthenticated')=='true')
+		next('/home');
+	else 
+		next(); 
 }
 
 
@@ -47,6 +29,7 @@ const routes: Array<RouteConfig> = [
 		// which is lazy-loaded when the route is visited.
 		component: () => import(/* webpackChunkName: "about" */ '@/views/Index.vue'),
 		children: [
+
 			{
 				name: 'Home',
 				path: '/home',
@@ -55,23 +38,18 @@ const routes: Array<RouteConfig> = [
 			{
 				name: 'Login',
 				path: '/login',
-				component: () => import('@/views/pages/Login.vue')
+				component: () => import('@/views/pages/Login.vue'),
+				beforeEnter : guardOnline
 			},
 			{
 				name: 'Profile',
 				path: '/profile',
-				component: () => import('@/views/pages/Profile.vue')
+				component: () => import('@/views/pages/Profile.vue'),
+				beforeEnter : guardOffline
 			}
 		]
 	},
-	{
-		path: '/',
-		redirect: '/home'
-	},
-	{
-		path: '*',
-		redirect: '/home'
-	},
+
 ];
 
 const isElectron: boolean = false; //String(process.env.IS_WEB).trim()

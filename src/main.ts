@@ -5,11 +5,16 @@ import router from '@/router';
 import qs from 'qs';
 import moment from 'vue-moment';
 import VuePageTransition from 'vue-page-transition';
-//import '@mdi/font/css/materialdesignicons.css'
-//import vuescroll from 'vuescroll';
+import axios from 'axios'
+
+
+
+
+
 
 Vue.config.productionTip = false;
 Vue.prototype.$appName = 'PM5 WEB FRONT'
+
 
 Vue.use(qs.stringify); // querystringify
 Vue.use(moment);

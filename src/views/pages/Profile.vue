@@ -157,6 +157,7 @@ export default Vue.extend({
                     }
                 })
                 .catch(function (error) {
+                    localStorage.setItem("isAuthenticated", "false");
                     bus.$emit("openAlert", "Erreur", error.response.data.error, "");
                 });
         },
@@ -181,6 +182,7 @@ export default Vue.extend({
                     }
                 })
                 .catch(function (error) {
+                    localStorage.setItem("isAuthenticated", "false");
                     bus.$emit(
                         "openAlert",
                         "Erreur",

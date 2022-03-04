@@ -22,7 +22,7 @@
                             <v-btn rounded dark depressed color="cGoogle" class="ma-2 mb-1">
                                 <v-icon left dark>mdi-google</v-icon>Google
                             </v-btn>
-                            <v-btn rounded dark depressed color="cGithub" class="ma-2" @click="authenticate('github')">
+                            <v-btn rounded dark depressed color="cGithub" class="ma-2">
                                 <v-icon left dark>mdi-github</v-icon>Github
                             </v-btn>
                         </div>
@@ -43,7 +43,7 @@
 <script lang="ts">
 // ANCHOR External imports
 import Vue from "vue";
-import router from "@/router";
+
 import axios from 'axios';
 import validator from 'validator';
 
@@ -54,13 +54,13 @@ import {
 
 const API_URL = process.env.VUE_APP_API_URL as string;
 
-
 export default Vue.extend({
     name: "Login",
     components: {
         Alert: () => import('@/components/Alert.vue'),
         DialogDelete: () => import('@/components/DialogDelete.vue'),
         DialogRegister: () => import('@/components/DialogRegister.vue'),
+
     },
     data() {
         return {
@@ -79,7 +79,7 @@ export default Vue.extend({
                 "https://cdn.vuetifyjs.com/images/parallax/material.jpg",
                 "https://cdn.vuetifyjs.com/images/parallax/material.jpg",
             ],
-            items: [],
+
         };
     },
     methods: {
@@ -116,10 +116,13 @@ export default Vue.extend({
                         })
                         .then((response) => {
                             if (response.status == 200) {
-                                router.push("/profile");
+                                localStorage.setItem("isAuthenticated", "true");
+                                bus.$emit("login");
+                                this.$router.push("/profile");
                             }
                         })
                         .catch(function (error) {
+                            localStorage.setItem("isAuthenticated", "false");
                             bus.$emit("openAlert", "Erreur", error.response.data.error, "");
                         });
                 }

@@ -57,20 +57,29 @@ export default Vue.extend({
     components: {},
     data() {
         return {
+
             textProfile: "Connexion",
-            routeProfile: "/profile"
+            routeProfile: "/login"
+
         };
     },
     methods: {},
     created() {
-
+        bus.$on('login', () => {
+            if (localStorage.getItem('isAuthenticated') == 'true') {
+                this.textProfile = "Profil"
+                this.routeProfile = "/profile"
+            } else {
+                this.textProfile = "Connexion"
+                this.routeProfile = "/login"
+            }
+        })
     },
     mounted() {
-        const params = {
-            isAuthenticated: this.$route.params.isAuthenticated == "true",
-        };
-        const API_URL = "";
-        if (params.isAuthenticated) this.textProfile = "Profile";
+        if (localStorage.getItem('isAuthenticated') == 'true') {
+            this.textProfile = "Profil"
+            this.routeProfile = "/profile"
+        }
     },
 });
 </script>

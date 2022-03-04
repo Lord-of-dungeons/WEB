@@ -38,3 +38,5 @@ chromedriver.log
 
 #android
 /android
+
+package-lock.json
