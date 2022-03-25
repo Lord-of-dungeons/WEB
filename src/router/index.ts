@@ -46,6 +46,11 @@ const routes: Array<RouteConfig> = [
 				path: '/profile',
 				component: () => import('@/views/pages/Profile.vue'),
 				beforeEnter : guardOffline
+			},
+			{
+				name: 'Shop',
+				path: '/shop',
+				component: () => import('@/views/pages/Shop.vue')
 			}
 		]
 	},

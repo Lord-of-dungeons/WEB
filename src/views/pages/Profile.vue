@@ -28,7 +28,7 @@
                                 </v-avatar>
                             </v-col>
                             <v-col md="8">
-                                <v-btn  dark depressed color="cProfile" class="mb-md-0 mb-3  mr-md-3 text-button" @click="changeAvatar">Modifier</v-btn>
+                                <v-btn dark depressed color="cProfile" class="mb-md-0 mb-3  mr-md-3 text-button" @click="changeAvatar">Modifier</v-btn>
                             </v-col>
                         </v-row>
                         <v-row class="pt-0" align="center" justify="center">

@@ -10,7 +10,7 @@
     <!-- ANCHOR Desktop view -->
     <div class="d-none d-md-block">
         <v-btn small dark depressed color="cPlay" class="ml-2 text-button" @click="$router.push('/home')">Présentation</v-btn>
-        <v-btn small dark depressed color="cShop" class="ml-2 text-button">Boutique</v-btn>
+        <v-btn small dark depressed color="cShop" class="ml-2 text-button" @click="$router.push('/shop')">Boutique</v-btn>
         <v-btn small dark depressed color="cProfile" class="ml-2 text-button" @click="$router.push(routeProfile)">{{
           textProfile
         }}</v-btn>

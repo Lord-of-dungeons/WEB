@@ -16,13 +16,13 @@
                             <v-btn rounded depressed color="cPrimary" class="ma-2 mb-1 cFontEmail--text" @click="registerDialog">
                                 <v-icon left dark>mdi-email-outline</v-icon>Email
                             </v-btn>
-                            <v-btn rounded dark depressed color="cFacebook" class="ma-2 mb-1">
+                            <v-btn rounded dark depressed color="cFacebook" class="ma-2 mb-1" @click="authenticate('facebook')">
                                 <v-icon left dark>mdi-facebook</v-icon>Facebook
                             </v-btn>
-                            <v-btn rounded dark depressed color="cGoogle" class="ma-2 mb-1">
+                            <v-btn rounded dark depressed color="cGoogle" class="ma-2 mb-1" @click="authenticate('google')">
                                 <v-icon left dark>mdi-google</v-icon>Google
                             </v-btn>
-                            <v-btn rounded dark depressed color="cGithub" class="ma-2">
+                            <v-btn rounded dark depressed color="cGithub" class="ma-2" @click="authenticate('github')">
                                 <v-icon left dark>mdi-github</v-icon>Github
                             </v-btn>
                         </div>
@@ -43,7 +43,6 @@
 <script lang="ts">
 // ANCHOR External imports
 import Vue from "vue";
-
 import axios from 'axios';
 import validator from 'validator';
 
@@ -83,7 +82,12 @@ export default Vue.extend({
         };
     },
     methods: {
-
+        authenticate: function (provider: any) {
+            this.$auth.authenticate(provider).then(function () {
+                // Execute application logic after successful social authentication
+                console.log("CA MARCHE !!!")
+            })
+        },
         Login() {
             if (this.email == "" || this.password == "")
                 bus.$emit(
@@ -133,6 +137,11 @@ export default Vue.extend({
         },
     },
     created() {
+        console.log(".ENV")
+        console.log(process.env.VUE_APP_API_URL)
+        console.log(process.env.VUE_APP_GOOGLE_CLIENT_ID)
+        console.log(process.env.VUE_APP_GITHUB_CLIENT_ID)
+        console.log(process.env.VUE_APP_GITHUB_CLIENT_SECRET)
         bus.$on("resize", (isMobile: boolean) => {
             this.isMobile = isMobile;
         });
