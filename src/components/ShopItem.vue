@@ -10,7 +10,7 @@
     </div>
     <v-divider class="mx-4"></v-divider>
 
-    <v-card-text class="text-center text-body-1">{{ itemPrice }} Fluz</v-card-text>
+    <v-card-text class="text-center text-body-1">{{ itemPrice }} Diamz</v-card-text>
 
 </v-card>
 </template>
