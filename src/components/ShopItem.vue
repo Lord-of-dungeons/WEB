@@ -1,5 +1,5 @@
 <template>
-<v-card :loading="loading" class="mx-auto my-3" max-width="374">
+<v-card :loading="loading" class="mx-auto my-3" max-width="374" align="center">
     <template slot="progress">
         <v-progress-linear color="deep-purple" height="10" indeterminate></v-progress-linear>
     </template>
@@ -10,7 +10,7 @@
     </div>
     <v-divider class="mx-4"></v-divider>
 
-    <v-card-text class="text-center text-body-1">{{ itemPrice }} Diamz</v-card-text>
+    <v-card-text class="text-center text-body-1">{{ itemPrice }} 💎</v-card-text>
 
 </v-card>
 </template>

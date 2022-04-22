@@ -6,11 +6,12 @@
             <v-col md="9">
                 <v-card class="mx-auto my-6">
                     <v-card-title style="word-break: break-word" class="text-h4 justify-left">Boutique</v-card-title>
-                    <v-card-text class="text-body-1">Résultats de la recherche</v-card-text>
+                    <v-card-text class="text-h6">Résultats de la recherche</v-card-text>
                     <v-card-text class="text-body-1">{{items.length}} éléments correspondent à vos critères</v-card-text>
-                    <v-container v-for="item4 in items4" :key="item4">
+                    <!-- if v-key is used in v-for, errors will occurs in the front -->
+                    <v-container v-for="item4 in items4">
                         <v-row>
-                            <v-col cols="12" sm="3" v-for="item in item4" :key="item">
+                            <v-col cols="12" sm="3" v-for="item in item4">
                                 <shop-item v-if="item != ''" :itemName="item.itemName" :itemPrice="item.itemPrice" :itemPicture="item.itemPicture" />
                             </v-col>
                         </v-row>
@@ -18,14 +19,31 @@
                 </v-card>
             </v-col>
             <v-col md="3">
-                <v-card class="mx-auto my-6">
-                    <v-btn block dark rounded depressed color="cPlay" class="ma-2 mb-1" @click="registerDialog"><v-icon left dark>mdi-diamond-stone</v-icon>Acheter des Diamz</v-btn>
-                    <v-btn  block dark rounded depressed color="cSocial" class="ma-2 mb-1" @click="registerDialog"><v-icon left dark>mdi-hand-coin</v-icon>Acheter du Fluz</v-btn>
-                    <v-card-text class="text-h5">Filtres</v-card-text>
-                    <v-text-field solo dense prepend-inner-icon="mdi-magnify" label="Rechercher" rounded class="shrink"></v-text-field>
-                    <v-card-text class="text-body-1">Catégories</v-card-text>
-                    <v-checkbox v-model="checkboxEquipment" label="Équipements"></v-checkbox>
-                    <v-checkbox v-model="checkboxSkin" label="Cosmétiques"></v-checkbox>
+                <v-card class="mx-auto my-6" align="center">
+                    <v-card-text class="text-h6 text-center">Solde : {{diamzAmount}} 💎</v-card-text>
+                    <v-row class="my-0 py-0">
+                        <v-col>
+                            <v-btn dark rounded depressed color="cPlay" @click="registerDialog">
+                                <v-icon left dark>mdi-diamond-stone</v-icon>Acheter des Diamz
+                            </v-btn>
+                        </v-col>
+                    </v-row>
+                    <v-row class="my-0 py-0">
+                        <v-col class="my-0 py-0">
+                            <v-btn dark rounded depressed color="cSocial" @click="registerDialog">
+                                <v-icon left dark>mdi-hand-coin</v-icon>Acheter du Fluz
+                            </v-btn>
+                        </v-col>
+                    </v-row>
+
+                    <v-card-text class="text-h5 text-left">Filtres</v-card-text>
+                    <v-text-field class="shrink mb-0 mt-0 ma-2" solo dense prepend-inner-icon="mdi-magnify" label="Rechercher" rounded></v-text-field>
+
+                    <v-card-text class="text-h6 mt-0 mb-2 text-left">Catégories</v-card-text>
+                    <v-checkbox class="mt-0" v-model="checkboxEquipment" label="Équipements"></v-checkbox>
+                    <v-checkbox class="mt-0" v-model="checkboxSkin" label="Cosmétiques"></v-checkbox>
+
+                    <v-btn dark rounded depressed color="cProfile" class="mb-2 mt-2" @click="registerDialog">Rechercher</v-btn>
                 </v-card>
             </v-col>
         </v-row>
@@ -56,6 +74,7 @@ export default Vue.extend({
     },
     data() {
         return {
+            diamzAmount: 777,
             checkboxEquipment: true,
             checkboxSkin: true,
             email: "michel.baieeeeeeeeeeeee@gmail.com",
