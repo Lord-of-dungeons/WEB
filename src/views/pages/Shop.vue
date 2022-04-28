@@ -23,14 +23,14 @@
                     <v-card-text class="text-h6 text-center">Solde : {{diamzAmount}} 💎</v-card-text>
                     <v-row class="my-0 py-0">
                         <v-col>
-                            <v-btn dark rounded depressed color="cPlay" @click="registerDialog">
+                            <v-btn dark rounded depressed color="cPlay" @click="openDialogBuyDiamz">
                                 <v-icon left dark>mdi-diamond-stone</v-icon>Acheter des Diamz
                             </v-btn>
                         </v-col>
                     </v-row>
                     <v-row class="my-0 py-0">
                         <v-col class="my-0 py-0">
-                            <v-btn dark rounded depressed color="cSocial" @click="registerDialog">
+                            <v-btn dark rounded depressed color="cSocial">
                                 <v-icon left dark>mdi-hand-coin</v-icon>Acheter du Fluz
                             </v-btn>
                         </v-col>
@@ -43,11 +43,12 @@
                     <v-checkbox class="mt-0" v-model="checkboxEquipment" label="Équipements"></v-checkbox>
                     <v-checkbox class="mt-0" v-model="checkboxSkin" label="Cosmétiques"></v-checkbox>
 
-                    <v-btn dark rounded depressed color="cProfile" class="mb-2 mt-2" @click="registerDialog">Rechercher</v-btn>
+                    <v-btn dark rounded depressed color="cProfile" class="mb-2 mt-2" >Rechercher</v-btn>
                 </v-card>
             </v-col>
         </v-row>
         <alert />
+        <dialog-buy-diamz />
     </v-container>
 </div>
 </template>
@@ -69,8 +70,8 @@ export default Vue.extend({
     name: "Shop",
     components: {
         Alert: () => import("@/components/Alert.vue"),
-        DialogDelete: () => import("@/components/DialogDelete.vue"),
         ShopItem: () => import("@/components/ShopItem.vue"),
+        DialogBuyDiamz: () => import("@/components/DialogBuyDiamz.vue"),
     },
     data() {
         return {
@@ -172,8 +173,8 @@ export default Vue.extend({
                 }
             }
         },
-        registerDialog() {
-            bus.$emit("registerDialog");
+        openDialogBuyDiamz() {
+            bus.$emit("openDialogBuyDiamz");
         },
         itemsToItems4(items: any) {
             const itemsLength = items.length;

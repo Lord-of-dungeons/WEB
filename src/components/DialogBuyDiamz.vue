@@ -1,15 +1,21 @@
 <template>
-<v-dialog id="basicConfirmDelete" persistent v-model="dialogConfirm" max-width="600">
-    <v-card>
-        <v-toolbar color="cPrimary2">{{ dialogTitleConfirm }}</v-toolbar>
-        <v-card-text>
-            <div class="text-h5 pa-12">{{ dialogContentConfirm }}</div>
-        </v-card-text>
-        <v-card-actions class="justify-end">
-            <v-btn text @click="confirmNo()">Non</v-btn>
-            <v-btn text @click="goToConfirm(goToRouteConfirm)">Oui</v-btn>
+<v-dialog id="DialogBuyDiamz" v-model="dialogConfirm" max-width="600">
+    <v-card align="center">
+        <v-toolbar color="cPrimary2">Acheter des Diamz</v-toolbar>
+        <v-img contain src="@/assets/placeholder.png" height="200"></v-img>
+        <v-card-text class="text-body-2">Description des diamz ici</v-card-text>
+        <v-card-actions class="justify-center">
+            <v-text-field class="shrink mb-0 mt-0 ma-2" solo v-model="amountDiamz" type="number" @change="changeDiamz"></v-text-field>
+            <v-card-text class="text-body-1">Diamz --></v-card-text>
+            <v-text-field class="shrink mb-0 mt-0 ma-2" solo v-model="amountEuro" type="number" @change="changeEuro"></v-text-field>
+            <v-card-text class="text-body-1">Euro</v-card-text>
+        </v-card-actions>
+        <v-card-actions class="justify-center">
+            <v-btn dark rounded depressed color="cProfile" class="mb-2 mt-2" @click="openDialogPayment()">Acheter</v-btn>
         </v-card-actions>
     </v-card>
+
+    <dialog-payment />
 </v-dialog>
 </template>
 
@@ -21,26 +27,27 @@ import {
 import axios from "axios";
 const API_URL = process.env.VUE_APP_API_URL as string;
 export default Vue.extend({
-    name: "DialogDelete",
-    components: {},
+    name: "DialogBuyDiamz",
+    components: {
+        Alert: () => import("@/components/Alert.vue"),
+        DialogPayment: () => import("@/components/DialogPayment.vue"),
+    },
     data() {
         return {
             token: localStorage.getItem("token") || "",
-            goToRoute: "",
-            routeURLConfirm: "",
-            idNameConfirm: "",
-            idConfirm: "",
             dialogConfirm: false,
-            dialogTitleConfirm: "",
-            dialogContentConfirm: "",
-            goToRouteConfirm: "",
+            amountDiamz: 100,
+            amountEuro: 1
         };
     },
     methods: {
-        openConfirm(title: string, content: string, goToRoute: string) {
-            this.dialogTitleConfirm = title;
-            this.dialogContentConfirm = content;
-            this.goToRouteConfirm = goToRoute;
+        openDialogPayment() {
+            if (this.amountDiamz >= 100)
+                bus.$emit("openDialogPayment", this.amountDiamz / 100);
+            else
+                bus.$emit("openAlert", "Erreur", "Le minimum achetable possible est d'au moins 100 Diamz", "");
+        },
+        openConfirm() {
             this.dialogConfirm = true;
         },
         goToConfirm(route: string) {
@@ -49,19 +56,21 @@ export default Vue.extend({
         confirmNo() {
             this.dialogConfirm = false;
         },
+        changeDiamz() {
+            this.amountEuro = this.amountDiamz / 100;
+        },
+        changeEuro() {
+            this.amountDiamz = this.amountEuro * 100;
+        },
     },
     created() {
         bus.$on(
-            "openConfirm",
-            (title: string, content: string, goToRoute: string, routeURL: string, idName: string, id: string) => {
-                console.log('emit works !')
-                this.routeURLConfirm = routeURL
-                this.goToRoute = goToRoute
-                this.idNameConfirm = idName
-                this.idConfirm = id
-                this.openConfirm(title, content, goToRoute);
+            "openDialogBuyDiamz",
+            () => {
+                this.openConfirm();
             }
         );
     },
+
 });
 </script>
