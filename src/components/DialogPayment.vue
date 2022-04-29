@@ -73,7 +73,7 @@ export default Vue.extend({
                     .then((response) => {
                         if (response.status == 201) {
                             // TODO close all dialogs when buying diamz
-                            bus.$emit("openAlert", "Information", "Paiement réussi !", "/shop");
+                            bus.$emit("openAlert", "Information", "Paiement réussi !", "reload");
                             this.dialogConfirm = false
                         }
                     })

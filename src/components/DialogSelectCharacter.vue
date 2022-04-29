@@ -18,7 +18,7 @@
         </v-list>
 
         <v-card-actions class="justify-center">
-            <v-btn dark rounded depressed color="cProfile" class="mb-2 mt-2" @click="payment()">Payer {{amountEuro}}€</v-btn>
+            <v-btn dark rounded depressed color="cProfile" class="mb-2 mt-2" @click="payment()">Payer {{ amountEuro }}€</v-btn>
         </v-card-actions>
     </v-card>
 </v-dialog>
@@ -29,11 +29,11 @@ import Vue from "vue";
 import {
     bus
 } from "@/main";
-import axios from 'axios';
-import validator from 'validator';
+import axios from "axios";
+import validator from "validator";
 const API_URL = process.env.VUE_APP_API_URL as string;
 export default Vue.extend({
-    name: "DialogPayment",
+    name: "DialogSelectCharacter",
     components: {
         Alert: () => import("@/components/Alert.vue"),
     },
@@ -43,30 +43,30 @@ export default Vue.extend({
             dialogConfirm: false,
 
             cardNumber: "4242424242424242",
-            expMonth: '12',
-            expYear: '2023',
-            cvc: '313',
+            expMonth: "12",
+            expYear: "2023",
+            cvc: "313",
 
             amountEuro: 1,
 
             characters: [{
-                    text: 'Real-Time',
-                    icon: 'mdi-clock'
+                    text: "Real-Time",
+                    icon: "mdi-clock",
                 },
                 {
-                    text: 'Audience',
-                    icon: 'mdi-account'
+                    text: "Audience",
+                    icon: "mdi-account",
                 },
                 {
-                    text: 'Conversions',
-                    icon: 'mdi-flag'
+                    text: "Conversions",
+                    icon: "mdi-flag",
                 },
             ],
         };
     },
     methods: {
         openConfirm(amount: number) {
-            this.amountEuro = amount
+            this.amountEuro = amount;
             this.dialogConfirm = true;
         },
         goToConfirm(route: string) {
@@ -82,23 +82,32 @@ export default Vue.extend({
             this.amountDiamz = this.amountEuro * 100;
         },
         payment() {
-            if (validator.isCreditCard(this.cardNumber) && this.cvc.match(/^[0-9]{3,4}$/)) {
-
+            if (
+                validator.isCreditCard(this.cardNumber) &&
+                this.cvc.match(/^[0-9]{3,4}$/)
+            ) {
                 axios
-                    .post(API_URL + "/shop/purchase-diamz", {
-                        diamzAmount: this.amountEuro * 100,
-                        cardNumber: this.cardNumber,
-                        exp_month: this.expMonth,
-                        exp_year: this.expYear,
-                        cvc: this.cvc,
-                    }, {
-                        withCredentials: true
-                    })
+                    .post(
+                        API_URL + "/shop/purchase-diamz", {
+                            diamzAmount: this.amountEuro * 100,
+                            cardNumber: this.cardNumber,
+                            exp_month: this.expMonth,
+                            exp_year: this.expYear,
+                            cvc: this.cvc,
+                        }, {
+                            withCredentials: true,
+                        }
+                    )
                     .then((response) => {
                         if (response.status == 201) {
                             // TODO close all dialogs when buying diamz
-                            bus.$emit("openAlert", "Information", "Paiement réussi !", "/shop");
-                            this.dialogConfirm = false
+                            bus.$emit(
+                                "openAlert",
+                                "Information",
+                                "Paiement réussi !",
+                                "/shop"
+                            );
+                            this.dialogConfirm = false;
                         }
                     })
                     .catch(function (error) {
@@ -106,14 +115,9 @@ export default Vue.extend({
                         bus.$emit("openAlert", "Erreur", error.response.data.error, "");
                     });
             } else {
-                bus.$emit(
-                    "openAlert",
-                    "Erreur",
-                    "Carte invalide !",
-                    ""
-                );
+                bus.$emit("openAlert", "Erreur", "Carte invalide !", "");
             }
-        }
+        },
     },
     created() {
         bus.$on("openDialogPayment", (amount: number) => {

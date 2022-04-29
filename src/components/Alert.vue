@@ -36,7 +36,10 @@ export default Vue.extend({
             this.dialog = true;
         },
         goTo(route: string) {
-            if (route != "") this.$router.push(route);
+            if (route != "" && route != "reload") 
+                this.$router.push(route);
+            if (route == "reload") 
+                location.reload();
             this.dialog = false;
         }
     },

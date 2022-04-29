@@ -12,7 +12,7 @@
                     <v-container v-for="item4 in items4">
                         <v-row>
                             <v-col cols="12" sm="3" v-for="item in item4">
-                                <shop-item v-if="item != ''" :itemName="item.itemName" :itemPrice="item.itemPrice" :itemPicture="item.itemPicture" />
+                                <shop-item v-if="item != ''" :itemName="item.name" :itemPrice="item.price" :itemPicture="item.imgPath" />
                             </v-col>
                         </v-row>
                     </v-container>
@@ -37,13 +37,13 @@
                     </v-row>
 
                     <v-card-text class="text-h5 text-left">Filtres</v-card-text>
-                    <v-text-field class="shrink mb-0 mt-0 ma-2" solo dense prepend-inner-icon="mdi-magnify" label="Rechercher" rounded></v-text-field>
+                    <v-text-field class="shrink mb-0 mt-0 ma-2" solo dense prepend-inner-icon="mdi-magnify" label="Rechercher" rounded v-model="searchString"></v-text-field>
 
                     <v-card-text class="text-h6 mt-0 mb-2 text-left">Catégories</v-card-text>
                     <v-checkbox class="mt-0" v-model="checkboxEquipment" label="Équipements"></v-checkbox>
-                    <v-checkbox class="mt-0" v-model="checkboxSkin" label="Cosmétiques"></v-checkbox>
+                    <v-checkbox class="mt-0" v-model="checkboxVocationAppearance" label="Cosmétiques"></v-checkbox>
 
-                    <v-btn dark rounded depressed color="cProfile" class="mb-2 mt-2" >Rechercher</v-btn>
+                    <v-btn dark rounded depressed color="cProfile" class="mb-2 mt-2" @click="searchShop()">Rechercher</v-btn>
                 </v-card>
             </v-col>
         </v-row>
@@ -75,49 +75,15 @@ export default Vue.extend({
     },
     data() {
         return {
-            diamzAmount: 777,
+            diamzAmount: 0,
+            searchString: "",
             checkboxEquipment: true,
-            checkboxSkin: true,
+            checkboxVocationAppearance: true,
             email: "michel.baieeeeeeeeeeeee@gmail.com",
             password: "bonjour1234",
             isMobile: false,
             show3: false,
-            items: [{
-                    itemName: "Épée de Lucien 1",
-                    itemPrice: 350,
-                    itemPicture: "https://i.postimg.cc/CKmLxY15/t2.png",
-                    itemCategory: "equipment",
-                    promotion: false,
-                },
-                {
-                    itemName: "Épée de Lucien 2",
-                    itemPrice: 450,
-                    itemPicture: "https://i.postimg.cc/CKmLxY15/t2.png",
-                    itemCategory: "equipment",
-                    promotion: false,
-                },
-                {
-                    itemName: "Épée de Lucien 3",
-                    itemPrice: 350,
-                    itemPicture: "https://i.postimg.cc/CKmLxY15/t2.png",
-                    itemCategory: "equipment",
-                    promotion: false,
-                },
-                {
-                    itemName: "Épée de Lucien 4",
-                    itemPrice: 250,
-                    itemPicture: "https://i.postimg.cc/CKmLxY15/t2.png",
-                    itemCategory: "equipment",
-                    promotion: false,
-                },
-                {
-                    itemName: "Épée de Lucien 5",
-                    itemPrice: 500,
-                    itemPicture: "https://i.postimg.cc/CKmLxY15/t2.png",
-                    itemCategory: "equipment",
-                    promotion: false,
-                },
-            ],
+            items: [],
             items4: [],
         };
     },
@@ -127,51 +93,41 @@ export default Vue.extend({
                 // Execute application logic after successful social authentication
             });
         },
-        Login() {
-            if (this.email == "" || this.password == "")
-                bus.$emit(
-                    "openAlert",
-                    "Erreur",
-                    "Veuillez rentrez des identifiants !",
-                    ""
-                );
-            else {
-                if (
-                    validator.isEmail(this.email) == false ||
-                    validator.isLength(this.password, {
-                        min: 8,
-                        max: 50,
-                    }) == false
-                ) {
-                    bus.$emit(
-                        "openAlert",
-                        "Erreur",
-                        "Syntaxe des identifiants invalide !",
-                        ""
-                    );
-                } else {
-                    axios
-                        .post(
-                            API_URL + "/auth/login", {
-                                email: this.email,
-                                password: this.password,
-                            }, {
-                                withCredentials: true,
-                            }
-                        )
-                        .then((response) => {
-                            if (response.status == 200) {
-                                localStorage.setItem("isAuthenticated", "true");
-                                bus.$emit("login");
-                                this.$router.push("/profile");
-                            }
-                        })
-                        .catch(function (error) {
-                            localStorage.setItem("isAuthenticated", "false");
-                            bus.$emit("openAlert", "Erreur", error.response.data.error, "");
-                        });
-                }
-            }
+        searchShop() {
+            const mayEquipment = this.checkboxEquipment ? 1 : 0;
+            const mayVocationAppearance = this.checkboxVocationAppearance ? 1 : 0;
+            axios
+                .post(
+                    API_URL + "/shop/search-shop", {
+                        searchString: this.searchString,
+                        mayEquipment: mayEquipment,
+                        mayVocationAppearance: mayVocationAppearance,
+                    }, {
+                        withCredentials: true,
+                    }
+                )
+                .then((response) => {
+                    if (response.status == 200) {
+
+                        this.items = []
+                        for (let i = 0; i < response.data.articles.length; i += 1) {
+                            this.items.push(response.data.articles[i]);
+                        }
+
+                        this.diamzAmount = response.data.diamzBalance
+                        this.items4 = this.itemsToItems4(this.items);
+                        // for (const item4 of this.items4) {
+                        //     console.log(item4[1].name)
+                        //     // for (const item of item4) {
+                        //     //     console.log(item.name)
+                        //     // }
+                        // }
+
+                    }
+                })
+                .catch(function (error) {
+                    localStorage.setItem("isAuthenticated", "false");
+                });
         },
         openDialogBuyDiamz() {
             bus.$emit("openDialogBuyDiamz");
@@ -179,7 +135,6 @@ export default Vue.extend({
         itemsToItems4(items: any) {
             const itemsLength = items.length;
             const chunkSize = 4;
-            console.log(itemsLength);
             let items4 = [];
             for (let i = 0; i < itemsLength; i += chunkSize) {
                 const chunk = items.slice(i, i + chunkSize);
@@ -189,8 +144,7 @@ export default Vue.extend({
         },
     },
     created() {
-        console.log(this.items);
-        this.items4 = this.itemsToItems4(this.items);
+        this.searchShop()
         bus.$on("resize", (isMobile: boolean) => {
             this.isMobile = isMobile;
         });
