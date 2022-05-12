@@ -9,39 +9,61 @@
         <v-card-text class="text-center text-body-1"><a @click="openDialogBuyArticle()">{{ itemName }}</a></v-card-text>
     </div>
     <v-divider class="mx-4"></v-divider>
+ 
+    <v-card-text class="text-center text-body-1" v-html="itemPriceString"></v-card-text>
 
-    <v-card-text class="text-center text-body-1">{{ itemPrice }} 💎</v-card-text>
-
-    <v-dialog id="DialogBuyArticle" v-model="DialogBuyArticleConfirm" max-width="600">
-        <v-card align="center">
-            <v-toolbar color="cPrimary2">Acheter des Diamz</v-toolbar>
-            <v-img contain src="@/assets/placeholder.png" height="200"></v-img>
-            <v-card-text class="text-body-2">Description de l'article ici</v-card-text>
-        </v-card>
-    </v-dialog>
 </v-card>
 </template>
 
 <script lang="ts">
 // ANCHOR External imports
+import {
+    bus
+} from "@/main";
 import Vue from "vue";
 export default Vue.extend({
     name: "ShopItem",
-    props: ["itemName", "itemPrice", "itemPicture"],
-
+    props: ["itemId", "itemDescription", "itemCategory", "itemName", "itemPrice", "itemPicture", "itemPromo"],
+    components: {},
     data() {
         return {
             loading: false,
             selection: 1,
             API_URL: process.env.VUE_APP_API_URL,
-            DialogBuyArticleConfirm: false,
+            dialogBuyArticle: false,
+            itemPriceString: ""
         };
     },
 
     methods: {
         openDialogBuyArticle() {
-            this.DialogBuyArticleConfirm = true;
+            const articlePicURL = this.API_URL.slice(0, -4) + this.itemPicture
+            bus.$emit(
+                "openDialogBuyArticle",
+                this.itemId,
+                this.itemDescription,
+                this.itemCategory,
+                this.itemName,
+                this.itemPrice,
+                articlePicURL,
+            );
         },
     },
+    created() {
+        if (this.itemPromo > 0) {
+            this.itemPriceString = "<i class = 'strike'>" + this.itemPrice.toString() + "</i> " + this.itemPromo + "💎" 
+        }
+        else {
+            this.itemPriceString = this.itemPrice.toString() + "💎"
+        }
+    }
 });
 </script>
+
+<style>
+
+.strike {
+    text-decoration:line-through;
+    color: red;
+}
+</style>
