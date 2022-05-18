@@ -48,6 +48,5 @@ export default Vue.extend({
             this.openAlert(title, content, goToRoute)
         })
     },
-
 });
 </script>

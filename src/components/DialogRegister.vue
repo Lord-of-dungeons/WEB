@@ -96,6 +96,7 @@ export default Vue.extend({
                                 "Information",
                                 "Inscription Réussite."
                             );
+                            
                         }
                     })
                     .catch(function (error) {

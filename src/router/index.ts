@@ -50,7 +50,20 @@ const routes: Array<RouteConfig> = [
 			{
 				name: 'Shop',
 				path: '/shop',
-				component: () => import('@/views/pages/Shop.vue')
+				component: () => import('@/views/pages/Shop.vue'),
+				beforeEnter : guardOffline
+			},
+			{
+				name: 'Social',
+				path: '/social',
+				component: () => import('@/views/pages/Social.vue'),
+				beforeEnter : guardOffline
+			},
+			{
+				name: 'Chat',
+				path: '/chat',
+				component: () => import('@/views/pages/Chat.vue'),
+				beforeEnter : guardOffline
 			}
 		]
 	},

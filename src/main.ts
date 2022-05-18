@@ -9,6 +9,9 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueAuthenticate from '@simbachain/vue-authenticate'
 
+import VueSocketIO from 'vue-socket.io'
+import SocketIO from 'socket.io-client'
+
 
 Vue.config.productionTip = false;
 Vue.prototype.$appName = 'PM5 WEB FRONT'
@@ -67,6 +70,27 @@ Vue.use(VueAuthenticate, {
 
   }
 })
+
+// FIXME socket.io major bug
+// Le serveur socket.io se crash/déconnecte quand on recharge la page
+// la création de connexion n'est pas créer après une première déconnexion (lors d'un refresh de page par exemple)
+// Si un client refresh/url sa session va crash et ne pourra plus se reconnecter et aucune nouvelle session ne sera créer mais les sessions qui n'ont pas crash fonctionneront toujours
+// Pistes :
+// - La connexion n'est pas déconnecté correctement
+// - La création de l'objet JS de connexion se fait trop tot/tard côté front
+// - Le serveur crash peut être
+
+
+// Socket.io part to avoid new instance every page load
+const API_URL = process.env.VUE_APP_API_URL as string;
+Vue.use(new VueSocketIO({
+  debug: true,
+  connection: SocketIO(API_URL.slice(0, -4), {  
+  'reconnection': true,
+  'reconnectionDelay': 1000,
+  'reconnectionAttempts': 20}), 
+  
+}))
 
 // NOTE initialize eventBus
 export const bus = new Vue(); // added line

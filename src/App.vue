@@ -4,6 +4,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
+
 //import Gestion from './mixins/Gestion';
 
 export default Vue.extend({

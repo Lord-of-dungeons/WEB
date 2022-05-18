@@ -54,7 +54,6 @@ export default Vue.extend({
         bus.$on(
             "openConfirm",
             (title: string, content: string, goToRoute: string, routeURL: string, idName: string, id: string) => {
-                console.log('emit works !')
                 this.routeURLConfirm = routeURL
                 this.goToRoute = goToRoute
                 this.idNameConfirm = idName
